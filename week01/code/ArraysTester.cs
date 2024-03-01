@@ -39,7 +39,19 @@ public static class ArraysTester {
         // step by step before you write the code. The plan should be clear enough that it could
         // be implemented by another person.
 
-        return new double[0]; // replace this return statement with your own
+        //Create an array the size of length
+        double[] answer = new double[length];
+
+        //We always know that number will be the first thing in the array so we add it to the 0 spot of the array
+        answer[0] = number;
+
+        //Start multiple at 1 (since we already added the first) and go to length.
+        for (var multiple = 1; multiple < length; multiple++){
+            //array spot = previous array spot + number;
+            answer[multiple] = answer[multiple - 1] + number;
+        }
+
+        return answer; 
     }
     
     /// <summary>
@@ -52,10 +64,16 @@ public static class ArraysTester {
     /// </summary>
     private static void RotateListRight(List<int> data, int amount)
     {
-        // TODO Problem 2 Start
-        // Remember: Using comments in your program, write down your process for solving this problem
-        // step by step before you write the code. The plan should be clear enough that it could
-        // be implemented by another person.
+        //we get the end of the list minus the amount
+        var end = data.GetRange(data.Count - amount, amount);
+        //we get the front of the list to the amount
+        var front = data.GetRange(0, data.Count - amount);
 
+        //clear the list
+        data.Clear();
+        //That the last may be first
+        data.AddRange(end);
+        //and the first may be last
+        data.AddRange(front);
     }
 }
