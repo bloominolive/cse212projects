@@ -39,9 +39,13 @@ public class CustomerServiceSolution {
         // Test 3
         // Scenario: Can I serve a customer if there is no customer?
         // Expected Result: This should display some error message
-        Console.WriteLine("Test 3");
         service = new CustomerServiceSolution(4);
+        service.AddNewCustomer();
+        service.AddNewCustomer();
+        Console.WriteLine($"Before serving customers: {service}");
         service.ServeCustomer();
+        service.ServeCustomer();
+        Console.WriteLine($"After serving customers: {service}");
         // Defect(s) Found: This found that I need to check the length in serve_customer and display an error message
 
         Console.WriteLine("=================");
