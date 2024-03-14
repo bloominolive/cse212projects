@@ -1,5 +1,5 @@
 ﻿Console.WriteLine("\n======================\nUnique Letters\n======================");
-UniqueLetters.Run();
+UniqueLettersSolution.Run();
 
 Console.WriteLine("\n======================\nDisplay Sums\n======================");
 DisplaySums.Run();

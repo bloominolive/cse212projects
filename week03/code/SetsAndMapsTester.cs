@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Text.Json;
 
 public static class SetsAndMapsTester {
@@ -111,6 +112,13 @@ public static class SetsAndMapsTester {
         // To display the pair correctly use something like:
         // Console.WriteLine($"{word} & {pair}");
         // Each pair of words should displayed on its own line.
+
+        var wordsSeen = new HashSet<string>();
+       foreach (var i in words){
+        if(wordsSeen.Contains($"{i[1]}{i[0]}"))
+         Console.WriteLine($"{i} & {i[1]}{i[0]}");
+           wordsSeen.Add(i);
+       }
     }
 
     /// <summary>
@@ -131,7 +139,11 @@ public static class SetsAndMapsTester {
         var degrees = new Dictionary<string, int>();
         foreach (var line in File.ReadLines(filename)) {
             var fields = line.Split(",");
-            // Todo Problem 2 - ADD YOUR CODE HERE
+            var degree = fields[3];
+            if (degrees.ContainsKey(degree))
+                degrees[degree] += 1;
+            else
+                degrees[degree] = 1;
         }
 
         return degrees;
@@ -157,8 +169,32 @@ public static class SetsAndMapsTester {
     /// # Problem 3 #
     /// #############
     private static bool IsAnagram(string word1, string word2) {
-        // Todo Problem 3 - ADD YOUR CODE HERE
-        return false;
+        
+        var normalizedWord1 = word1.Replace(" ", "").ToLower();
+        var normalizedWord2 = word2.Replace(" ", "").ToLower();
+
+        if (normalizedWord1.Length != normalizedWord2.Length) return false;
+
+        var characters = new Dictionary<char, int>();
+       
+        foreach (char c in normalizedWord1)
+        {
+            if (characters.TryGetValue(c, out int value))
+                characters[c] = ++value;
+            else
+                characters[c] = 1;
+        }
+
+        foreach (char c in normalizedWord2)
+        {
+            if (!characters.TryGetValue(c, out int value)) return false; 
+
+            characters[c] = --value;
+
+            if (value < 0) return false;
+        }
+
+        return true;
     }
 
     /// <summary>
@@ -231,9 +267,9 @@ public static class SetsAndMapsTester {
 
         var featureCollection = JsonSerializer.Deserialize<FeatureCollection>(json, options);
 
-        // TODO:
-        // 1. Add code in FeatureCollection.cs to describe the JSON using classes and properties 
-        // on those classes so that the call to Deserialize above works properly.
-        // 2. Add code below to print out each place a earthquake has happened today and its magitude.
+        foreach(var earthquake in featureCollection.Features){
+            Console.WriteLine(earthquake.Properties.Place + " - Mag " + earthquake.Properties.Mag);
+        }
+        
     }
 }
