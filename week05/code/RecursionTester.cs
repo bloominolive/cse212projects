@@ -67,7 +67,7 @@ public static class RecursionTester {
         Console.WriteLine(CountWaysToClimb(20)); // 121415
         // Uncomment out the test below after implementing memoization.  It won't work without it.
         // TODO Problem 3
-        // Console.WriteLine(CountWaysToClimb(100));  // 180396380815100901214157639
+        Console.WriteLine(CountWaysToClimb(100));  // 180396380815100901214157639
 
         // Sample Test Cases (may not be comprehensive) 
         Console.WriteLine("\n=========== PROBLEM 4 TESTS ===========");
@@ -146,8 +146,15 @@ public static class RecursionTester {
     /// n &lt;= 0, just return 0.   A loop should not be used.
     /// </summary>
     public static int SumSquaresRecursive(int n) {
-        // TODO Start Problem 1
-        return 0;
+        if (n <= 0)
+        {
+            return 0;
+        }
+        else
+        {
+            int test = n*n + SumSquaresRecursive(n - 1);
+            return test;
+        }
     }
 
     /// <summary>
@@ -170,7 +177,23 @@ public static class RecursionTester {
     /// and the length of the letters list).
     /// </summary>
     public static void PermutationsChoose(string letters, int size, string word = "") {
-        // TODO Start Problem 2
+        // Try adding each of the available letters
+        // to the 'word' and add up all the
+        // resulting permutations.
+        if (size == 0)
+        {
+            Console.WriteLine(word);
+            return;
+        }
+
+        for (int i = 0; i < letters.Length; i++)
+        {
+            string chosen = letters[i].ToString();
+            // Remove the chosen letter from the letters string
+            string remaining = letters.Substring(0, i) + letters.Substring(i + 1);
+            // Recurse with the chosen letter added to the permutation being built
+            PermutationsChoose(remaining, size - 1, word + chosen);
+        }
     }
 
     /// <summary>
@@ -219,6 +242,9 @@ public static class RecursionTester {
     /// until the memoization is implemented.
     /// </summary>
     public static decimal CountWaysToClimb(int s, Dictionary<int, decimal>? remember = null) {
+        if (remember == null)
+            remember = new Dictionary<int, decimal>();
+
         // Base Cases
         if (s == 0)
             return 0;
@@ -229,8 +255,12 @@ public static class RecursionTester {
         if (s == 3)
             return 4;
 
+        if (remember.ContainsKey(s))
+            return remember[s];
+
         // Solve using recursion
-        decimal ways = CountWaysToClimb(s - 1) + CountWaysToClimb(s - 2) + CountWaysToClimb(s - 3);
+        decimal ways = CountWaysToClimb(s - 1, remember) + CountWaysToClimb(s - 2, remember) + CountWaysToClimb(s - 3, remember);
+        remember[s] = ways;
         return ways;
     }
 
@@ -247,8 +277,21 @@ public static class RecursionTester {
     /// Using recursion, display all possible binary strings for a given pattern.  You might find 
     /// some of the string functions like IndexOf and [..X] / [X..] to be useful in solving this problem.
     /// </summary>
-    public static void WildcardBinary(string pattern) {
-        // TODO Start Problem 4
+    public static void WildcardBinary(string pattern, int starting = 0) {
+        int wildcardIndex = pattern.IndexOf('*', starting);
+        
+        if (wildcardIndex == -1) {
+            Console.WriteLine(pattern);
+            return;
+        }
+        
+        
+        string addZero = pattern.Substring(0, wildcardIndex) + '0' + pattern.Substring(wildcardIndex + 1);
+        WildcardBinary(addZero, wildcardIndex + 1);
+        
+        
+        string addOne = pattern.Substring(0, wildcardIndex) + '1' + pattern.Substring(wildcardIndex + 1);
+        WildcardBinary(addOne, wildcardIndex + 1);
     }
 
     /// <summary>
